@@ -1,203 +1,165 @@
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>給朱夢的一封信</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap');
-html,body{
-  margin:0; padding:0;
-  width:100%; height:100%;
-  font-family:'Noto Sans TC',sans-serif;
-  background:linear-gradient(to top, #1b1b3a, #ffd1dc);
-  overflow:hidden; display:flex; justify-content:center; align-items:center;
-  color:#fff;
-}
+<title>給朱夢</title>
 
-/* 雪花 */
-.snowflake{
-  position:absolute;
-  top:0; left:50%;
-  width:6px; height:6px; border-radius:50%;
-  background:linear-gradient(45deg,#ffb6c1,#ff69b4,#ffc0cb);
-  opacity:0.9;
-  pointer-events:none;
-  transform-origin:center center;
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&display=swap');
+
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  background:linear-gradient(to bottom,#fffaf6,#f6eaea);
+  font-family:"Noto Sans TC",sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
 /* 卡片 */
-.card{
+#card{
   position:relative;
-  background:rgba(255 255 255 / 0.15);
-  backdrop-filter:blur(15px);
-  border-radius:20px;
-  padding:25px 20px;
-  max-width:90%;
-  width:350px;
-  box-shadow:0 0 20px rgba(255,209,220,0.5);
-  z-index:10;
+  background:rgba(255,255,255,0.9);
+  border-radius:22px;
+  padding:42px 36px;
+  width:340px;
+  box-shadow:0 12px 30px rgba(150,120,120,0.18);
   text-align:center;
+  transition:opacity 4s ease;
 }
 
-/* 文字 */
-.line{ font-size:14px; margin-bottom:10px; letter-spacing:1px; line-height:1.4; }
+/* 名字 */
+#name{
+  font-size:32px;
+  letter-spacing:6px;
+  margin-bottom:26px;
+  color:#7a5a63;
+}
 
-/* 愛心 / 最終排列 */
+/* 文字容器 */
+#lineBox{
+  position:relative;
+  min-height:140px;
+}
+
+/* 行 */
+.line{
+  font-size:15px;
+  line-height:1.9;
+  letter-spacing:1px;
+  color:#8b6a73;
+  opacity:0;
+  transition:opacity 2s ease;
+  margin-bottom:14px;
+}
+
+/* 單字 */
 .letter{
-  position:absolute; font-size:16px; font-weight:700; color:#ffd1dc;
-  opacity:0; pointer-events:none;
-  text-shadow:0 0 5px #fff,0 0 10px #ffc0cb;
-  transition: transform 1s ease, left 1s ease, top 1s ease, opacity 1s ease;
-}
-.letter.flash{ animation: flash 0.8s infinite alternate; }
-@keyframes flash{
-  0% {text-shadow:0 0 5px #fff,0 0 10px #ffc0cb;}
-  100% {text-shadow:0 0 10px #fff,0 0 20px #ff69b4;}
+  position:absolute;
+  font-size:15px;
+  color:#8b6a73;
+  opacity:1;
+  transition:
+    left 3s ease,
+    top 3s ease,
+    opacity 3s ease;
 }
 
-/* 愛心跳動 */
-@keyframes heartbeat{0%,100%{transform:scale(1);}50%{transform:scale(1.3);}}
-.heartbeat{animation: heartbeat 0.6s ease-in-out 2;}
-
-button{
-  margin-top:12px; padding:10px 24px; font-size:16px; font-weight:600;
-  color:#38163c; background:#ffd1dc; border:none; border-radius:30px; cursor:pointer;
-  touch-action: manipulation;
+/* 最後一句 */
+#end{
+  margin-top:26px;
+  font-size:14px;
+  letter-spacing:3px;
+  color:#a88991;
+  opacity:0;
+  transition:opacity 2s ease;
 }
-button:hover{background:#e3a4b8;}
 </style>
 </head>
+
 <body>
 
-<div class="card" id="textCard">
-  <h1>朱夢</h1>
-  <div class="line">我想跟妳說</div>
-  <div class="line">一些心裡話。</div>
-  <div class="line">那天的錯字</div>
-  <div class="line">真的不是故意的。</div>
-  <div class="line">我很在意妳</div>
-  <div class="line">也很抱歉。</div>
-  <button id="heartBtn">點我</button>
+<div id="card">
+  <div id="name">朱　夢</div>
+
+  <div id="lineBox">
+    <div class="line">我想慢慢地，把這些話寫給妳。</div>
+    <div class="line">那天第一次給你發的消息，真的只是打錯字，之後也撤回了，沒有別的意思。</div>
+    <div class="line">只是我太笨，卻又那麼在意妳。</div>
+    <div class="line">如果讓妳覺得不被珍惜，我很抱歉。</div>
+    <div class="line">這些話，也許來得晚了一點。</div>
+  </div>
+
+  <div id="end">真的，對不起。</div>
 </div>
 
-<div id="letterContainer"></div>
-<audio id="heartSound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
-
 <script>
-const heartBtn=document.getElementById('heartBtn');
-const textCard=document.getElementById('textCard');
-const container=document.getElementById('letterContainer');
-const heartSound=document.getElementById('heartSound');
+const lines=[...document.querySelectorAll('.line')];
+const box=document.getElementById('lineBox');
+const end=document.getElementById('end');
+const card=document.getElementById('card');
 
-// 初始化雪花
-const snowflakes=[];
-const numFlakes=120;
-for(let i=0;i<numFlakes;i++){
-  let s=document.createElement('div');
-  s.className='snowflake';
-  s.style.width=s.style.height=(4+Math.random()*6)+'px';
-  s.dataset.angle=Math.random()*2*Math.PI;
-  s.dataset.radius=50+Math.random()*150;
-  s.dataset.speed=0.01+Math.random()*0.02;
-  document.body.appendChild(s);
-  snowflakes.push(s);
-}
+let letters=[];
+let delay=1000;
 
-// 漩渦動畫
-function updateSnow(){
-  snowflakes.forEach(s=>{
-    let angle=parseFloat(s.dataset.angle);
-    let radius=parseFloat(s.dataset.radius);
-    let speed=parseFloat(s.dataset.speed);
-    angle+=speed;
-    s.dataset.angle=angle;
-    s.style.left=`calc(50% + ${Math.cos(angle)*radius}px)`;
-    s.style.top=`calc(50% + ${Math.sin(angle)*radius}px)`;
-  });
-  requestAnimationFrame(updateSnow);
-}
-updateSnow();
-
-heartBtn.addEventListener('click',()=>{
-  heartBtn.disabled = true;
-  heartSound.currentTime = 0;
-  heartSound.play();
-  heartBtn.classList.add('heartbeat');
-
-  const lines=[...textCard.querySelectorAll('.line')];
-  let letters=[];
-  lines.forEach(line=>line.textContent.split('').forEach(ch=>{if(ch.trim()!=='') letters.push(ch);}));
-  textCard.innerHTML='';
-
-  letters.forEach(ch=>{
-    let span=document.createElement('div');
-    span.className='letter flash';
-    span.textContent=ch;
-    container.appendChild(span);
-  });
-
-  function heart(t){return [16*Math.pow(Math.sin(t),3), -(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))];}
-  const spans=[...container.querySelectorAll('.letter')];
-  const total=spans.length, scale=16;
-
-  // 愛心排列
-  spans.forEach((span,i)=>{
-    const t=(i/total)*Math.PI*2;
-    const [x,y]=heart(t);
-    span.style.left=(50+x*scale)+'%';
-    span.style.top=(50+y*scale)+'%';
-    setTimeout(()=>span.style.opacity=1,i*30);
-  });
-
-  // 愛心爆炸 + 漩渦散開
-  setTimeout(()=>{
-    spans.forEach(span=>{
-      const angle=Math.random()*2*Math.PI;
-      const radius=50+Math.random()*100;
-      const curve=Math.random()*40-20;
-      span.style.transform=`translate(${Math.cos(angle)*radius+curve}px,${Math.sin(angle)*radius+curve}px)`;
-    });
-
-    // 聚集成朱夢光點效果
-    setTimeout(()=>{
-      const final='朱夢';
-      spans.forEach((span,i)=>{
-        span.textContent=final[i%final.length];
-        span.style.fontSize='48px';
-      });
-
-      let centerX=window.innerWidth/2;
-      let centerY=window.innerHeight/2;
-      let offsets=[[-30,0],[30,0]];
-
-      spans.forEach((span,i)=>{
-        span.style.transition='all 2.5s ease-in-out';
-        span.style.left=`${centerX + offsets[i][0]}px`;
-        span.style.top=`${centerY + offsets[i][1]}px`;
-        span.style.transform='rotate(0deg)';
-        span.style.opacity=1;
-      });
-
-      // 光點慢慢散開微旋轉
-      setTimeout(()=>{
-        spans.forEach(span=>{
-          const angle=Math.random()*2*Math.PI;
-          const radius=60+Math.random()*50;
-          const rotate=Math.random()*360;
-          span.style.transition='all 3s ease-in-out';
-          span.style.left=`${centerX + Math.cos(angle)*radius}px`;
-          span.style.top=`${centerY + Math.sin(angle)*radius}px`;
-          span.style.transform=`rotate(${rotate}deg)`;
-          span.style.opacity=1;
-        });
-      },2500);
-
-    },2000);
-
-  },2000);
-
+/* 一行一行出現 */
+lines.forEach((line,i)=>{
+  setTimeout(()=>line.style.opacity=1,delay+i*1800);
 });
+
+/* 拆字 */
+setTimeout(()=>{
+  lines.forEach(line=>{
+    const rect=line.getBoundingClientRect();
+    const boxRect=box.getBoundingClientRect();
+    const text=line.textContent;
+    line.textContent='';
+
+    [...text].forEach((ch,i)=>{
+      const span=document.createElement('span');
+      span.className='letter';
+      span.textContent=ch;
+      span.style.left=(rect.left-boxRect.left+i*16)+'px';
+      span.style.top=(rect.top-boxRect.top)+'px';
+      box.appendChild(span);
+      letters.push(span);
+    });
+  });
+},11000);
+
+/* 愛心公式 */
+function heart(t){
+  return [
+    16*Math.pow(Math.sin(t),3),
+    -(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))
+  ];
+}
+
+/* 排列成愛心 */
+setTimeout(()=>{
+  const rect=box.getBoundingClientRect();
+  const cx=rect.width/2;
+  const cy=rect.height/2+10;
+  const total=letters.length;
+
+  letters.forEach((l,i)=>{
+    const t=i/total*Math.PI*2;
+    const [x,y]=heart(t);
+    l.style.left=cx+x*6+'px';
+    l.style.top=cy+y*6+'px';
+  });
+
+  end.style.opacity=1;
+},16000);
+
+/* 停留 → 合上卡片 */
+setTimeout(()=>{
+  card.style.opacity=0;
+},24000);
 </script>
+
 </body>
 </html>
